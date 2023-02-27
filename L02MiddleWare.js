@@ -5,12 +5,13 @@ const app=express();
 //"*" : 가로챌 요청의 패턴 (* 모든 와일드카드)
 //next : /a.do 요청을 미들웨어가 중간에 가로챘는데 /a.do로 계속 가려면 next()를 호출하면 된다.
 app.use("*",(req, res, next)=>{
-    console.log("* 미들웨어가 가로챔!")
+    console.log("* 미들웨어가 가로챔!",req.originalUrl);
     next();
 });
 app.use("/user/*",(req, res, next)=>{
+    console.log("/user/* 미들웨어가 가로챔!",req.originalUrl);
     if(req.query.id){
-        next();
+        next(); //원래 요청하던 url 이동
     }else{
         res.redirect("/");
         //res.writeHead(302,{location:"/"});
@@ -43,3 +44,5 @@ app.get("/",async (req, res)=>{
 app.listen(7777,()=>{
     console.log("http://localhost:7777 에 미들웨어 수업")
 })
+//["","",""].length == 3
+//"abcd".length == 4
