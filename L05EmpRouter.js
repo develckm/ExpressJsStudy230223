@@ -19,7 +19,6 @@ router.get("/detail.do",async (req,res)=>{
 //pathVariable : 쿼리스트링이 파라미터를 파악하기 어렵고 해당 파라미터가 리소스의 꼭 필요한 것을 명시하기 위해 등장
 //method 분할 : (get, post) , put, delete, patch
 //express가 파라미터를 패스에서 받을 수 있도록 지워!
-//4.10분까지 오류 있는 분은 5분까지 들어오세요~
 router.get("/:empno/update.do",async (req,res)=>{
     //empno 가 존재하지 않는 페이지는 없는 페이지기 때문에 400에러 설정은 필요없다.
     const [rows,f]=await scott.query("SELECT * FROM EMP WHERE EMPNO=?",[req.params.empno]);
@@ -29,6 +28,37 @@ router.get("/:empno/update.do",async (req,res)=>{
         res.redirect("list.do");
     }
 });
+router.post("/update.do",async (req,res)=>{
+    let sql="UPDATE EMP SET ENAME=?,JOB=?,HIREDATE=?,SAL=?,COMM=?,DEPTNO=?,MGR=? WHERE EMPNO=?";
+    for(let key in req.body){ //"" 을 null 처리
+        if(!req.body[key]){ req.body[key]=null;}
+    }
+    //parseFloat NaN 가 아닌 null 을 반환!!!
+    const values=
+        [   req.body.ename,
+            req.body.job,
+            req.body.hiredate,
+            parseFloat(req.body.sal),
+            parseFloat(req.body.comm),
+            parseInt(req.body.deptno),
+            parseInt(req.body.mgr),
+            parseInt(req.body.empno)
+        ];
+    let update=0;
+    try {
+        const [result]=await scott.execute(sql,values);
+        update=result.affectedRows; //dml 실행시 성공한 row 수
+    }catch (e) {
+        console.error(e)
+    }
+    if(update>0){
+        res.redirect("./detail.do?empno="+req.body.empno);
+    }else{
+        res.redirect(`./${req.body.empno}/update.do`);
+    }
+});//부서 라우터를 만들어보세요~
+
+
 
 router.get("/insert.do",(req, res)=>{
     res.render("empInsert");
