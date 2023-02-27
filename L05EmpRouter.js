@@ -38,12 +38,13 @@ router.post("/update.do",async (req,res)=>{
         [   req.body.ename,
             req.body.job,
             req.body.hiredate,
-            parseFloat(req.body.sal),
-            parseFloat(req.body.comm),
-            parseInt(req.body.deptno),
-            parseInt(req.body.mgr),
+            (req.body.sal) && parseFloat(req.body.sal),
+            (req.body.comm) && parseFloat(req.body.comm),
+            (req.body.deptno) && parseInt(req.body.deptno),
+            (req.body.mgr) && parseInt(req.body.mgr),
             parseInt(req.body.empno)
         ];
+    console.log(values)
     let update=0;
     try {
         const [result]=await scott.execute(sql,values);
