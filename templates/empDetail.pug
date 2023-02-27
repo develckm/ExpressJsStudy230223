@@ -22,7 +22,7 @@ html(lang="en")
                 strong=emp.COMM
             p
                 span 입사일 :
-                strong=emp.HIREDATE.toLocaleDateString("ko-KR")
+                strong=emp.HIREDATE && emp.HIREDATE.toLocaleDateString("ko-KR")
             p
                 span 상사 :
                 strong=emp.MGR

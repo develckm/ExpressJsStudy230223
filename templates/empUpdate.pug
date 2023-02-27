@@ -22,14 +22,17 @@ html(lang="en")
             p
                 span 상여급 :
                 input(value=emp.COMM,name="comm")
-                -let y=emp.HIREDATE.getUTCFullYear();
-                -let m=emp.HIREDATE.getUTCMonth()+1;
-                -m=(m<10)?`0${m}`:m;
-                -let d=emp.HIREDATE.getUTCDate();
-                -d=(d<10)?`0${d}`:d;
+                -let nowStr="";
+                -if(emp.HIREDATE)
+                    -let y=emp.HIREDATE.getUTCFullYear();
+                    -let m=emp.HIREDATE.getUTCMonth()+1;
+                    -m=(m<10)?`0${m}`:m;
+                    -let d=emp.HIREDATE.getUTCDate();
+                    -d=(d<10)?`0${d}`:d;
+                    -nowStr=`${y}-${m}-${d}`;
             p
                 span 입사일 :
-                input(value=`${y}-${m}-${d}` ,name="hiredate", type="date")
+                input(value=nowStr ,name="hiredate", type="date")
             p
                 span 상사 :
                 input(value=emp.MGR,name="mgr")

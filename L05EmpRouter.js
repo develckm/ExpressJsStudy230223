@@ -25,7 +25,7 @@ router.get("/:empno/update.do",async (req,res)=>{
     if(rows.length>0){
         res.render("empUpdate",{emp:rows[0]});
     }else{
-        res.redirect("list.do");
+        res.redirect("./list.do");
     }
 });
 router.post("/update.do",async (req,res)=>{
@@ -44,6 +44,7 @@ router.post("/update.do",async (req,res)=>{
             (req.body.mgr) && parseInt(req.body.mgr),
             parseInt(req.body.empno)
         ];
+    //() && () && .. :모두가 true 가 될때까지 실행 만약 false 멈추고 반환
     console.log(values)
     let update=0;
     try {
@@ -53,7 +54,7 @@ router.post("/update.do",async (req,res)=>{
         console.error(e)
     }
     if(update>0){
-        res.redirect("./detail.do?empno="+req.body.empno);
+        res.redirect("/emp/detail.do?empno="+req.body.empno);
     }else{
         res.redirect(`./${req.body.empno}/update.do`);
     }

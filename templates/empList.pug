@@ -20,7 +20,7 @@ html(lang="en")
                         td=emp.EMPNO
                         td=emp.ENAME
                         th=emp.SAL
-                        th=emp.HIREDATE.toLocaleDateString("ko-KR")
+                        th=emp.HIREDATE && emp.HIREDATE.toLocaleDateString("ko-KR")
                         th=emp.DEPTNO
                         th
                             a(href=`/emp/detail.do?empno=${emp.EMPNO}`) 상세
