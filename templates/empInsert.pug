@@ -1,30 +1,28 @@
-html(lang="en")
-    head
-        title SCOTT.emp CRUD
-        meta(charset="UTF-8")
-        script(src="/js/emp/insert.js", defer=true )
-        style.
-            form[name=empInsertForm] input{
-                border-top-style: none;
-                border-left-style: none;
-                border-right-style: none;
-            }
-            form[name=empInsertForm] input:focus {
-                outline-style: none;
-            }
-            .inputCont.error{
-                color: darkred;
-            }
-            .inputCont.success {
-                color: seagreen;
-            }
-            .inputCont.success input{
-                border-color: seagreen;
-            }
-            .inputCont.error input{
-                border-color: darkred;
-            }
-    body
+extends layout.pug
+block content
+    script(src="/js/emp/insert.js", defer=true )
+    style.
+        form[name=empInsertForm] input{
+            border-top-style: none;
+            border-left-style: none;
+            border-right-style: none;
+        }
+        form[name=empInsertForm] input:focus {
+            outline-style: none;
+        }
+        .inputCont.error{
+            color: darkred;
+        }
+        .inputCont.success {
+            color: seagreen;
+        }
+        .inputCont.success input{
+            border-color: seagreen;
+        }
+        .inputCont.error input{
+            border-color: darkred;
+        }
+    main
         h1 사원 등록 폼
         form(name="empInsertForm",action="/emp/insert.do",method="POST")
             div.inputCont

@@ -1,8 +1,6 @@
-html(lang="en")
-    head
-        title SCOTT.emp CRUD
-        meta(charset="UTF-8")
-    body
+extends layout
+block content
+    main
         h1 사원 수정 폼 (Read)
         form(name="empUpdateForm",action="/emp/update.do",method="POST")
             p

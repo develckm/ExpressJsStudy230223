@@ -59,11 +59,85 @@ router.post("/update.do",async (req,res)=>{
         res.redirect(`./${req.body.empno}/update.do`);
     }
 });//부서 라우터를 만들어보세요~
-
-
-
 router.get("/insert.do",(req, res)=>{
     res.render("empInsert");
 });
+router.post("/insert.do",async (req,res)=>{
+    for (let key in req.body){
+        if(!req.body[key]){
+            req.body[key]=null;
+        }else{
+            if(key==="comm" || key==="sal"){
+                req.body[key]=parseFloat(req.body[key]);
+            }else if(key==="empno" || key==="deptno" || key==="mgr"){
+                req.body[key]=parseInt(req.body[key]);
+            }
+            if(Number.isNaN(req.body[key])){
+                res.status(500).send(`<h1>${key}이(가) 수가 아닌 값을 입력하셨습니다.</h1>`);
+                return;
+            }
+        }
+    }
+    let insert=0; //등록 성공 여부
+    try { //모델
+        let sql="INSERT INTO EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO) VALUE (?,?,?,?,?,?,?,?)";
+        const [result]=await scott.execute(sql,[req.body.empno, req.body.ename, req.body.job, req.body.mgr, req.body.hiredate, req.body.sal, req.body.comm, req.body.deptno]);
+        insert=result.affectedRows;
+    }catch (e) {
+        console.error(e);
+        res.status(500).send(`<h1>DB 등록을 실패했습니다. 다시 시도하세요!</h1>`);
+        return;
+    }
+    //응답 처리
+    if(insert>0){
+        res.redirect("/emp/list.do");
+    }else{
+        res.redirect("/emp/insert.do");
+    }
+
+});
+router.get("/delete.do",async(req, res)=>{
+    if(!req.query.empno || isNaN(req.query.empno)){
+        res.status(400).send("400 잘못된 요청입니다.");
+        return;
+    }
+    let empno=parseInt(req.query.empno);
+    //요청처리
+    let del=0;
+    try {//모델
+        let sql="DELETE FROM EMP WHERE EMPNO=?";
+        const [result]=await scott.execute(sql,[empno]);
+        del=result.affectedRows;
+    }catch (e) {
+        console.error(e);
+    }
+    if(del>0){
+        res.redirect("/emp/list.do");
+    }else{
+        res.redirect(`/emp/${empno}/update.do`);
+    }
+});
+router.get("/empnoCheck.do",async(req,res)=>{
+   if(!req.query.empno || isNaN(req.query.empno)){
+       res.sendStatus(400);
+       return;
+   }
+   let empno=parseInt(req.query.empno);
+   const resObj={check:false,emp:null};
+   try {
+        let sql="SELECT * FROM EMP WHERE EMPNO=?";
+        const[rows,f]=await scott.query(sql,[empno]);
+        if(rows.length>0){
+            resObj.check=true;
+            resObj.emp=rows[0];
+        }
+   }catch (e) {
+       console.error(e);
+       res.sendStatus(500);
+       return;
+   }
+   res.send(resObj);
+});
+
 
 module.exports=router;
