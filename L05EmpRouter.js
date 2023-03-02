@@ -96,6 +96,7 @@ router.post("/insert.do",async (req,res)=>{
     }
 
 });
+//이번주 express 다음주부터 톰캣! model1 => model2 => spring
 router.get("/delete.do",async(req, res)=>{
     if(!req.query.empno || isNaN(req.query.empno)){
         res.status(400).send("400 잘못된 요청입니다.");
